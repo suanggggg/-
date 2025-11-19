@@ -1,0 +1,55 @@
+@startuml ER_Diagram
+' 简要 ER 图草案（PlantUML）
+entity "User" as U {
+  *id : uuid
+  --
+  username : varchar
+  role : enum
+  phone : varchar
+  contact_account : varchar
+  birth_md : varchar
+  points_balance : int
+}
+entity "Question" as Q {
+  *id : uuid
+  source : varchar
+  region : varchar
+  subject : varchar
+  type : varchar
+  difficulty : int
+  content : text
+  answer : text
+  analysis : text
+  status : enum
+}
+entity "Assessment" as A {
+  *id : uuid
+  user_id : uuid
+  type : varchar
+  start_time : datetime
+  end_time : datetime
+  media_ref : varchar
+  system_score : json
+}
+entity "ExpertScore" as E {
+  *id : uuid
+  assessment_id : uuid
+  expert_id : uuid
+  scores : json
+  remark : text
+  timestamp : datetime
+}
+entity "PointTx" as P {
+  *id : uuid
+  from_user : uuid
+  to_user : uuid
+  amount : int
+  type : varchar
+  status : varchar
+  created_at : datetime
+}
+U ||--o{ A : takes
+U ||--o{ P : participates
+Q ||--o{ A : used_in
+A ||--o{ E : has
+@enduml

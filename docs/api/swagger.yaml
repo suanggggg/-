@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Exam & Interview System API (Sample)
+  version: 0.1.0
+paths:
+  /auth/register:
+    post:
+      summary: 用户注册
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: 注册成功
+  /auth/login:
+    post:
+      summary: 用户登录
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: 登录成功，返回 token
+  /questions:
+    get:
+      summary: 列出题目（支持过滤）
+      parameters:
+      - in: query
+        name: subject
+        schema:
+          type: string
+      - in: query
+        name: difficulty
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 题目列表
+    post:
+      summary: 创建题目（管理员/导入）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionCreate'
+      responses:
+        '201':
+          description: 创建成功
+  /assessments:
+    post:
+      summary: 新增测评记录（开始测评）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentCreate'
+      responses:
+        '201':
+          description: 测评创建成功
+components:
+  schemas:
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
+    QuestionCreate:
+      type: object
+      properties:
+        content:
+          type: string
+        answer:
+          type: string
+        subject:
+          type: string
+        difficulty:
+          type: integer
+    AssessmentCreate:
+      type: object
+      properties:
+        user_id:
+          type: string
+        type:
+          type: string
+        questions:
+          type: array
+          items:
+            type: string
